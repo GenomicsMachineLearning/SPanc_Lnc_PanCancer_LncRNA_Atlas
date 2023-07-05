@@ -1,4 +1,6 @@
+
 ####################### TCGA heatmap #######################
+
 setwd("~/Downloads/PhD/Analysis/ST/QUAN/RNAscope/new/")
 T<-read.csv("gc43_lncRNAs_TCGA.txt", sep="\t", header=TRUE)
 MT <- T[, -1]
@@ -6,7 +8,8 @@ rownames(MT)<-T$Sample.ID
 Tanno<-as.data.frame(read.csv("metadata.txt", sep="\t", header=TRUE))
 Tannom<- as.data.frame(as.matrix(Tanno[, -1]))
 rownames(Tannom)<-Tanno$uTAR
-pheatmap(log(MT+0.0001),cluster_rows=FALSE, annotation_row = Tannom, angle=45)
+pheatmap(log(MT+0.0001),cluster_rows=FALSE, annotation_row = Tannom,angle=45)
+
 
 ####################### Alluvial plot Figure 3B #######################
 
@@ -54,6 +57,16 @@ ggplot(data2, aes(y = count, axis1 = lncRNA, axis2 = hallmark)) +
   scale_fill_manual(values = rev(color_palette))+
   theme(axis.text = element_text(size = 12))
 
+
+####################### Upset Plots #######################
+
+library(UpSetR)
+library(ComplexHeatmap)
+df<-read.csv("/Users/ritanya/Downloads/PhD/Analysis/ST/QUAN/upset_plot/upset_mat_4cancer_3_5p.txt", sep="\t", header=TRUE)
+#df<-read.csv("/Users/ritanya/Downloads/PhD/Analysis/ST/QUAN/upset_plot/spatial_upset_mat.txt", sep="\t", header=TRUE)
+m = make_comb_mat(df, top_n_sets = 10)
+UpSet(m, top_annotation = upset_top_annotation(m, add_numbers = TRUE),
+      right_annotation = upset_right_annotation(m, add_numbers = TRUE))
 
 
 
