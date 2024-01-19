@@ -121,12 +121,6 @@ pheatmap::pheatmap(lcpm_o[topMarkers,],breaks=seq(-2,2,length.out=101),color=col
 #grid.text(levels(annot_o$cluster), x = c(0.25, 0.6), y = c(0.89, 0.89),gp = gpar(fontsize = 10, rot = 45))
 dev.off()
 
-Error in hclust(d, method = method) : 
-  NA/NaN/Inf in foreign function call (arg 10)
-Calls: <Anonymous> -> cluster_mat -> hclust
-Execution halted
-
-
 
 
 
