@@ -1,1 +1,50 @@
+cd /nfs_master/prakrithi/lncRNA_atlas/phastcons/
+conda activate ucsc
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t1\t"$6}' ../Q4386/polyA_FreshFrozen/Visium15_HeadNeck/D1/uTARs_uniq.bed > HND.bed
+bigWigAverageOverBed /nfs_master/pallavi/databases/phastCons30way_hg38/hg38.phastCons30way.bw your_regions.bed your_regions_phastcons.tab
+
+#extract fasta for coding potential 
+bedtools getfasta -fi /nfs_master/prakrithi/test/ST/refdata-gex-GRCh38-2020-A/fasta/genome.fa -bed HNB.bed -s > HNB.fa
+
+# CPAT - Coding potential
+nohup ~/miniconda3/envs/cpat_new/bin/cpat.py -x Human_Hexamer.tsv -d Human_logitModel.RData -g ../HNB.fa -o HNB_cpat 2> HNB_cpat.log &
+
+awk '$11<0.364 {print }' HNB_cpat.ORF_prob.best.tsv > HNB_noncoding.tsv
+#Human coding probability (CP) cutoff: 0.364 (CP >=0.364 indicates coding sequence, CP < 0.364 indicates noncoding sequence) 
+
+conda activate cpat
+#RNA fasta for MFE
+seqtk seq -r HNB.fa | sed 's/T/U/g'  > HNB_RNA.fa
+
+RNAfold HNB_RNA.fa > HNB_RNAfold.txt
+awk '/^>/ {id=$1} / \(-[0-9]+\.[0-9]+\)$/ {mfe=$NF; print id, mfe}' HNB_RNAfold.txt | sed 's/>//g' | sed 's/(//g' | sed 's/)//g' > HNB_MFE.txt
+
+
+awk -F"_" '{print $1":"$2"-"$3$4}' HNB_phastcons.tab > hnb1
+awk '{print $6}' HNB_phastcons.tab > hnb2
+paste hnb1 hnb2 > HNB_phastcons_score.txt
+rm hnb*
+
+join HNB_phastcons_score.txt HNB_MFE.txt > HNB_phastcons_MFE_data.txt
+
+#gtex eQTL analysis
+/Users/ritanya/homebrew/bin/bedtools intersect -a All_uTARs_merged_sorted.bed -b ../reference/GTEX_eQTLs_17062023.bed -wo | awk '{print $4"\t"$10}' | sort | uniq | awk -F '\t' 'BEGIN {OFS="\t"} {split($2, arr, "/"); print $1, arr[3]}' > uTAR_tissue_overlap.txt
+
+terms=( $(cut -f 2 uTAR_tissue_overlap.txt | sort -u) )   # Store the unique terms from column 2 in an array
+for term in "${terms[@]}"; do
+  count=$(grep "$term" uTAR_tissue_overlap.txt | cut -f 1 | sort | uniq | wc -l)
+  echo "$term $count"
+done
+
+#gwas
+bedtools intersect -a All_uTARs_merged_sorted.bed -b ../GWAS_catalog/GWAS_catalog_All_associations_v1.02.bed -wo | awk -F"\t" '{print $4"\t"$10}' | sed 's/ /_/g' > utar_trait.txt
+awk 'BEGIN { FS = OFS = "\t" } { split($2, arr, /,/); $2 = arr[1] } 1' utar_trait.txt > utar_trait2.txt
+
+terms=( $(cut -f 2 utar_trait2.txt | sort -u) )   # Store the unique terms from column 2 in an array
+for term in "${terms[@]}"; do
+  count=$(grep -w "$term" utar_trait2.txt | cut -f 1 | sort | uniq | wc -l)
+  echo "$term $count"
+done > uTAR_trait_counts.txt
+
+sort -k2,2nr uTAR_trait_counts.txt | head
 
