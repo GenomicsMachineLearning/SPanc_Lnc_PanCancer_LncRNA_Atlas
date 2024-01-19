@@ -1,3 +1,4 @@
+## in R ###
 library(TCGAbiolinks)
 library(GenomicRanges)
 library(TCGAbiolinks)
@@ -19,7 +20,7 @@ query_mel_all = GDCquery(
 output_mel <- getResults(query_mel_all)
 write.table(output_mel,"SKCM_all_sample_type_meta_gdc.txt",sep="\t",quote=FALSE, row.names=FALSE)
 
-
+### In terminal bash ###
 awk -F"\t" '/Primary Tumor/ {print $3}' SKCM_meta_gdc.txt |  awk -F"-" '{print $1"-"$2"-"$3"-"$4}' > bw_sample_id_to_use.txt
 grep -wf bw_sample_id_to_use.txt ../TCGA_metadata_proj_bwID.txt | awk '{print toupper($2)".bw\t"$3}' > bw_sample_id_matchingfiles_to_load.txt
 
@@ -34,7 +35,7 @@ ls *bw > bw_list.txt
 grep -f bw_list.txt bw_sample_id_matchingfiles_to_load_metastatic_normal.txt > tmp
 mv tmp bw_sample_id_matchingfiles_to_load_metastatic_normal.txt
 
-##
+## in R ##
 df <- read.csv("bw_sample_id_matchingfiles_to_load_metastatic_normal.txt",sep="\t",header=FALSE) #removed 72189C87-53DD-427E-B163-91E404577A7A.bw C7A75027-D49D-4D60-93A8-588487B5D690.bw
 
 # Loop through each row in the data frame
