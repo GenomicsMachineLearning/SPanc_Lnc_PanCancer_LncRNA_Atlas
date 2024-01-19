@@ -1,1 +1,98 @@
+zcat TAR_expression_matrix_withDir.txt.gz | awk '$1~/_0$/ {print $1}' | awk -F"_" '{print $1"\t"$2"\t"$3"\t"$1"_"$2"_"$3"_"$4"_"$5"_"$6"\t.\t"$4}' > uTARs_all.bed
 
+#bedtools intersect -a uTARs_all.bed -b /nfs_master/prakrithi/human_ref/gencode36_genes_anno.bed -v > uTARs_uniq.bed
+bedtools intersect -a uTARs_all.bed -b /nfs_master/prakrithi/human_ref/gencode.v43_all_anno.bed -v > uTARs_uniq.bed
+#bedtools intersect -a uTARs_uniq.bed -b /nfs_master/prakrithi/human_ref/pseudogenes/pseudogenes_hg38.bed -s -wo | awk '{print $4}' | sort | uniq > pseudogene_uTARs
+#bedtools intersect -a uTARs_uniq.bed -b /nfs_master/prakrithi/human_ref/pseudogenes/pseudogenes_hg38.bed -s -v > non_pseudogene_uTARs.bed
+
+awk '{print $4}' uTARs_uniq.bed > uTARs_uniq_list
+sed -i '1i\GENE' uTARs_uniq_list
+zgrep -f uTARs_uniq_list TAR_expression_matrix_withDir.txt.gz > uTARs_uniq_mat.txt
+
+cd /nfs_master/prakrithi/lncRNA_atlas/Q4386/polyA_FreshFrozen
+for i in */*/*uniq.bed ; do bedtools intersect -a $i -b /nfs_master/prakrithi/human_ref/LncBook_Version2.0_onlylnc.bed -s -wo > $i.inLncExpDB.bed ; done
+for i in */*/*uniq.bed ; do bedtools intersect -a $i -b /nfs_master/prakrithi/human_ref/FANTOM_CAT.lv1_raw.only_lncRNA.bed -s -wo > $i.inFANTOM.bed ; done
+
+for i in */*/*inFANTOM* ; do awk '{print $4}' $i | sort | uniq | wc -l ; echo $i ; done
+for i in */*/*inLnc* ; do awk '{print $4}' $i | sort | uniq | wc -l ; echo $i ; done
+for i in */*/*inLnc* ; do awk '{print $4}' $i | sort | uniq > $i.List ; done
+for i in */*/*FANTOM* ; do awk '{print $4}' $i | sort | uniq > $i.List ; done
+comm -12 uTARs_uniq.bed.inFANTOM.bed.List uTARs_uniq.bed.inLncExpDB.bed.List | wc -l
+
+lnc=(*/*/*.inLncExpDB.bed.List)
+FANTOM=(*/*/*.inFANTOM.bed.List)
+n=10
+for (( i = 0; i < n; i++ )); do
+    lnc="${lnc[i]}"
+    FANTOM="${FANTOM[i]}"
+#    comm -12 "$inLncExpDB" "$FANTOM" | echo "$inLncExpDB" 
+    printf "%s <-> %s\n" "$inLncExpDB" "$FANTOM"
+    # or whatever
+done
+
+
+# Common uTARs across samples of a cancer type for upset plot
+awk '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\tS1_Pre"}' uTARs_uniq.bed > uTARs_uniq_to_merge.bed
+cat */uTARs_uniq_to_merge.bed > Mel_uTARs.bed
+sortBed -i Mel_uTARs.bed > Mel_uTARs_sorted.bed
+
+bedtools merge -i Mel_uTARs_sorted.bed -s -c 6 -o collapse | sed -e 's/+,/+/g' | sed -e 's/+\{2,\}/+/g' | sed -e 's/-,/-/g' | sed -e 's/-\{2,\}/-/g' > Mel_merged_uTARs.bed
+
+/Users/ritanya/homebrew/bin/bedtools merge -i Pre_uTARs.bed -s -c 6,7 -o collapse | sed -e 's/+,/+/g' | sed -e 's/+\{2,\}/+/g' | sed -e 's/-,/-/g' | sed -e 's/-\{2,\}/-/g' > Pre_merged_uTARs.bed
+
+/Users/ritanya/homebrew/bin/bedtools merge -i all_final_to_merge -s -c 7,8,9,10,11 -o max > upset_mat_3_5p.txt
+
+##celranger
+/nfs_master/prakrithi/Tools/cellranger-7.0.1/cellranger count --id=BCC_5p --fastqs=/nfs_master/prakrithi/lncRNA_atlas/scRNA/5prime/BCC_SRX5128480/ --sample=SRR8315735 --transcriptome=/nfs_master/prakrithi/test/ST/refdata-gex-GRCh38-2020-A
+
+
+## SCAFE - scRNA 5 prime analysis
+
+scafe.download.resources.genome --genome=hg38.gencode_v32
+scafe.check.dependencies
+
+scafe.workflow.sc.solo --overwrite=yes        --run_bam_path=/nfs_master/prakrithi/lncRNA_atlas/Q4386/polyA_FreshFrozen/Visium15_HeadNeck/B1/outs/possorted_genome_bam.bam --run_cellbarcode_path=/nfs_master/prakrithi/lncRNA_atlas/Q4386/polyA_FreshFrozen/Visium15_HeadNeck/B1/outs/filtered_feature_bc_matrix/barcodes.tsv.gz --genome=hg38.gencode_v32  --run_tag=HNB --run_outDir=/nfs_master/prakrithi/lncRNA_atlas/Q4386/polyA_FreshFrozen/Visium15_HeadNeck/B1/
+
+cd <sample_dir>
+for i in {0,1000,2000,5000,10000,25000,50000,75000,100000}; do bedtools window -w $i -a uTARs_uniq.bed -b *.CRE.annot.bed.gz -sm > uTARs.CRE.w.$i.bed ; awk '{print $4}' uTARs.CRE.w.$i.bed | sort | uniq | wc -l ; done
+
+scafe.workflow.sc.solo --overwrite=yes  --run_bam_path=/nfs_master/prakrithi/lncRNA_atlas/scRNA/5prime/BCC_SRX5128480/SRR8315735/BCC_5p/outs/possorted_genome_bam.bam --run_cellbarcode_path=/nfs_master/prakrithi/lncRNA_atlas/scRNA/5prime/BCC_SRX5128480/SRR8315735/BCC_5p/outs/raw_feature_bc_matrix/barcodes.tsv.gz --genome=hg38.gencode_v32  --run_tag=BCC_5p --run_outDir=/nfs_master/prakrithi/lncRNA_atlas/scRNA/5prime/BCC_SRX5128480/SRR8315735/SCAFE
+
+
+
+nohup scafe.workflow.sc.solo --overwrite=yes  --run_bam_path=SRR20791203/outs/possorted_genome_bam.bam --run_cellbarcode_path=SRR20791203/outs/raw_feature_bc_matrix/barcodes.tsv.gz --genome=hg38.gencode_v32  --run_tag=A3_Pre --run_outDir=SCAFE/ &> A3_Pre_SCAFE.log
+
+
+
+# All_uTARs_merged_sorted has PolyA_FF, FFPE_Mel, VLP13
+#enhancer types
+/Users/ritanya/homebrew/bin/bedtools intersect -a All_uTARs_merged_sorted.bed -b ../reference/ENCODE_cCREs_17062023.bed -wo | awk '{print $4"\t"$10}' | sort | uniq | awk '{print $2}' | awk '{                
+    count[$1]++
+}
+END {
+    for (item in count) {
+        print item, count[item]
+    }
+}'
+
+
+#gtex eQTL analysis
+/Users/ritanya/homebrew/bin/bedtools intersect -a All_uTARs_merged_sorted.bed -b ../reference/GTEX_eQTLs_17062023.bed -wo | awk '{print $4"\t"$10}' | sort | uniq | awk -F '\t' 'BEGIN {OFS="\t"} {split($2, arr, "/"); print $1, arr[3]}' > uTAR_tissue_overlap.txt
+
+terms=( $(cut -f 2 uTAR_tissue_overlap.txt | sort -u) )   # Store the unique terms from column 2 in an array
+for term in "${terms[@]}"; do
+  count=$(grep "$term" uTAR_tissue_overlap.txt | cut -f 1 | sort | uniq | wc -l)
+  echo "$term $count"
+done
+
+#gwas
+bedtools intersect -a All_uTARs_merged_sorted.bed -b ../GWAS_catalog/GWAS_catalog_All_associations_v1.02.bed -wo | awk -F"\t" '{print $4"\t"$10}' | sed 's/ /_/g' > utar_trait.txt
+awk 'BEGIN { FS = OFS = "\t" } { split($2, arr, /,/); $2 = arr[1] } 1' utar_trait.txt > utar_trait2.txt
+
+terms=( $(cut -f 2 utar_trait2.txt | sort -u) )   # Store the unique terms from column 2 in an array
+for term in "${terms[@]}"; do
+  count=$(grep -w "$term" utar_trait2.txt | cut -f 1 | sort | uniq | wc -l)
+  echo "$term $count"
+done > uTAR_trait_counts.txt
+
+sort -k2,2nr uTAR_trait_counts.txt | head
