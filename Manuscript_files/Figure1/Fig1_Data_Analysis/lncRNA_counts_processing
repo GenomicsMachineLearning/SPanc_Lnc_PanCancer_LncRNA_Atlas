@@ -76,23 +76,3 @@ END {
 }'
 
 
-#gtex eQTL analysis
-/Users/ritanya/homebrew/bin/bedtools intersect -a All_uTARs_merged_sorted.bed -b ../reference/GTEX_eQTLs_17062023.bed -wo | awk '{print $4"\t"$10}' | sort | uniq | awk -F '\t' 'BEGIN {OFS="\t"} {split($2, arr, "/"); print $1, arr[3]}' > uTAR_tissue_overlap.txt
-
-terms=( $(cut -f 2 uTAR_tissue_overlap.txt | sort -u) )   # Store the unique terms from column 2 in an array
-for term in "${terms[@]}"; do
-  count=$(grep "$term" uTAR_tissue_overlap.txt | cut -f 1 | sort | uniq | wc -l)
-  echo "$term $count"
-done
-
-#gwas
-bedtools intersect -a All_uTARs_merged_sorted.bed -b ../GWAS_catalog/GWAS_catalog_All_associations_v1.02.bed -wo | awk -F"\t" '{print $4"\t"$10}' | sed 's/ /_/g' > utar_trait.txt
-awk 'BEGIN { FS = OFS = "\t" } { split($2, arr, /,/); $2 = arr[1] } 1' utar_trait.txt > utar_trait2.txt
-
-terms=( $(cut -f 2 utar_trait2.txt | sort -u) )   # Store the unique terms from column 2 in an array
-for term in "${terms[@]}"; do
-  count=$(grep -w "$term" utar_trait2.txt | cut -f 1 | sort | uniq | wc -l)
-  echo "$term $count"
-done > uTAR_trait_counts.txt
-
-sort -k2,2nr uTAR_trait_counts.txt | head
