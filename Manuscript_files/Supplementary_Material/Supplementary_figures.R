@@ -112,9 +112,9 @@ p1<-ggplot(result_df1, aes(x = cell_type, y = value, size = -log(p_value+0.00000
   theme_minimal() +
   scale_color_gradient2(low = "blue", mid = "white", high = "red", midpoint = 35) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p1 + p2 + plot_layout(ncol = 2, heights = c(3, 3))
 
 ###############################################################################################################################
 
 
-p1 + p2 + plot_layout(ncol = 2, heights = c(3, 3))
 
