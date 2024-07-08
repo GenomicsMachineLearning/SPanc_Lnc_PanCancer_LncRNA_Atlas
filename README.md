@@ -8,7 +8,7 @@ First, lncRNAs are computationally validated, comparing to existing databases,  
 
 Through the comprehensive mapping and functional annotation, we have identified potential cancer-associated lncRNAs. Annotations are available as a website to serve as a pan-cancer atlas of single-cell and spatially resolved lnRNAs. These cell-type specific lncRNAs could complement established biomarkers because they reflect the unique characteristics of specific cell populations within tumors, offering more precise insights into disease progression and treatment response. 
 
-The lncRNA expression and annotations can be accessed and visualized in the interactive website SPA-Lnc: [https://prakrithi-p.github.io/Lncrnaspa/pages/about](https://spanclnc.click/pages/about)
+The lncRNA expression and annotations can be accessed and visualized in the interactive website SPA-Lnc: [https://prakrithi-p.github.io/Lncrnaspa/pages/about](https://spanclnc.click/pages/about)](https://spanclnc.click/pages/about)
 
 
 The codes that were used to build and host the website can be found at  [https://github.com/GenomicsMachineLearning/SPanC-Lnc_Backend](https://spanclnc.click/) and https://github.com/GenomicsMachineLearning/SPanC-Lnc_Website 
