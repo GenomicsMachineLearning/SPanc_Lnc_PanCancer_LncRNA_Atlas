@@ -1,0 +1,25 @@
+name: ucsc
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - bedtools=2.30.0=h468198e_3
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2023.5.7=hbcca054_0
+  - libgcc-ng=12.1.0=h8d9b700_16
+  - libgomp=12.1.0=h8d9b700_16
+  - libpng=1.6.37=h753d276_4
+  - libstdcxx-ng=12.1.0=ha89aaad_16
+  - libuuid=2.32.1=h7f98852_1000
+  - libzlib=1.2.12=h166bdaf_2
+  - mysql-connector-c=6.1.11=h6eb9d5d_1007
+  - openssl=1.1.1t=h0b41bf4_0
+  - ucsc-bedgraphtobigwig=377=ha8a8165_3
+  - ucsc-bigwigaverageoverbed=377=ha8a8165_3
+  - viennarna=2.3.3=hfc679d8_2
+  - xz=5.2.6=h166bdaf_0
+  - zlib=1.2.12=h166bdaf_2
+prefix: /home/prakrithi/miniconda3/envs/ucsc
