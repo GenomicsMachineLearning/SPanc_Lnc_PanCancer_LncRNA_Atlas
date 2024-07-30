@@ -1,4 +1,5 @@
-# Several environments were used for different analysis. Here are the conda environment yml files and corresponding analysis it was used for
+## Several environments were used for different analysis. Here are the conda environment yml files and corresponding analysis it was used for
+
 scTAR_cellranger.yml - Conda environment for running the uTAR pipeline
 scNanoGPS.yml - Nanopore data scNanoGPS analysis
 cpat.yml - Coding potential analysis, Minimum free energy calculation
