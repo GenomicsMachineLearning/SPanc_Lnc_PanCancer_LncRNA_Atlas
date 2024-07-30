@@ -1,1 +1,11 @@
-
+scTAR_cellranger.yml - Conda environment for running the uTAR pipeline
+TCGA.yml
+edger.yml
+morans.yml
+WGCNA.yml
+pacbio.yml
+stlearn.yml
+cpat.yml
+hlpiensemble.yml
+scNanoGPS.yml
+ucsc.yml
