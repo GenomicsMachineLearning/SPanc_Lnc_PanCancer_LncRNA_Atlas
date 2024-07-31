@@ -1,0 +1,26 @@
+## Configuration for the from_cellranger Snakemake workflow.
+
+# sample name, pointing to cellranger count output directory (same as the ""--id" input for cellranger count)
+Samples:
+    VLP30_A1:
+    VLP30_B1:
+    VLP30_C1:
+    VLP30_D1:	
+
+CR_REF: /scratch/user/s4716765/uTAR/ST/refdata-gex-GRCh38-2020-A #DWM - directory containing cellranger count reference
+
+DATADIR: /QRISdata/Q4386/polyA_FreshFrozen/Visium30_KidneyCancer/ #ctory where cellranger_count outputs are stored - be sure to use an absolute path (starting with root)
+TMPDIR: ./tmp # directory for temporary files
+
+########################################################################################################
+# Executables - file paths
+########################################################################################################
+PICARD: /home/s4716765/.conda/envs/py3.8/share/picard-2.26.3-0/picard.jar
+DROPSEQ: /home/s4716765/.conda/envs/py3.8/share/dropseq_tools-2.4.1-0
+GTFTOGENEPRED: /home/s4716765/.conda/envs/py3.8/bin/gtfToGenePred # used to convert gtf to reFflat format, not needed if annotation is in reFflat
+BLASTDB: /shared_data/genome_db/BLAST_NCBI # path to where the nt BLAST database is stored
+
+CORES: 10 # how many cores to give for each process (snakemake automatically parallelizes process using "snakemake -j {numTotalCores}")
+
+MERGEBP: 500
+THRESH: 10000000
