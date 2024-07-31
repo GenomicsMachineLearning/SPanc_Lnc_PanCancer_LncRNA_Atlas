@@ -1,3 +1,5 @@
+FOLDER DESCRIPTION
+
 Figure 1 - Atlas and lncRNA pipeline and stats
 Figure 2 - Coding Potential, Classification, eQTLs, sequence features
 Figure 3 - Cancer specififc lncRNAs and validation with ONT
@@ -7,3 +9,19 @@ Figure 6 - Response to treatment in single cell and spatial data
  
 Supplementary Material - Codes for analyses and figures shown in the supplementary
 all_spatial_plots.py - Code for all spatial expression plots
+
+PREVIOUSLY PUBLISHED DATA LINKS
+- This study also uses raw data from previously published in-house datasets available to access as follows (also described in the manuscript)
+   - Visium Melanoma: https://zenodo.org/records/8053920
+   - Visium Medulloblastoma PDOX Mouse models: PRJEB53588 (ENA)
+   - Visium SCC, BCC: PRJEB54964 (ENA)
+   - Visium Breast Cancer (https://www.swarbricklab.com/data-and-code-access)
+   - Public scRNA-Seq datasets: Acral and Cutaneous Melanoma from the study ( PRJNA862451), PBMCs from Merkel cell carcinoma (MCC) (SRR7722937), head and neck cancer patients (SRR13418965, SRR13419137, SRR13419168) and 5’- sequencing datasets of tissue biopsies from patients with basal cell carcinoma (BCC). This included data before and after anti-PD-1 therapy from three patients (SRX5128480, SRX5128482, SRX5128486, SRX5128489, SRX5128506, SRX5128507).
+
+- scRNA-seq dataets from 10X Genomics site
+  - Breast DIC https://www.10xgenomics.com/resources/datasets/7-5-k-sorted-cells-from-human-invasive-ductal-carcinoma-3-v-3-1-3-1-standard-6-0-0
+  - Glioblastoma https://www.10xgenomics.com/resources/datasets/human-glioblastoma-multiforme-3-v-3-whole-transcriptome-analysis-3-standard-4-0-0
+  - Kidney Cancer (5') https://www.10xgenomics.com/resources/datasets/5k-human-kidney-tumor-isolated-with-chromium-nuclei-isolation-kit-3-1-standard
+  - Lung (NSCLC) https://www.10xgenomics.com/resources/datasets/nsclc-tumor-5-gene-expression-1-standard-2-2-0
+  - Pancreatic cancer https://www.10xgenomics.com/resources/datasets/5k-human-pancreatic-tumor-isolated-with-chromium-nuclei-isolation-kit-3-1-standard
+  - Ovarian cancer https://www.10xgenomics.com/resources/datasets/5k-human-ovarian-tumor-isolated-with-chromium-nuclei-isolation-kit-3-1-standard
