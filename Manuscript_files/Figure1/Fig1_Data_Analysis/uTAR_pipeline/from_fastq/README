@@ -1,0 +1,14 @@
+The analysis uuses a Snakemake script. The paths to FastQ files and softwares are provided in the corresponding config file
+
+In the config.yml file, UMI range must be modified according to the chemistry.
+
+For example: 
+For v2 chemistry scRNA-seq and Visium
+UMI_range: # unique molecular identifier range
+        first: 17
+        last: 26
+
+For v3 chemistry scRNA-seq and Visium
+UMI_range: # unique molecular identifier range
+        first: 17
+        last: 28
