@@ -11,4 +11,4 @@ Through the comprehensive mapping and functional annotation, we have identified 
 The lncRNA expression and annotations can be accessed and visualized in the interactive website SPA-Lnc: [https://spanclnc.click/pages/about](https://spanclnc.click/pages/about)
 
 
-The codes that were used to build and host the website can be found at  [https://github.com/GenomicsMachineLearning/SPanC-Lnc_Backend](https://spanclnc.click/) and https://github.com/GenomicsMachineLearning/SPanC-Lnc_Website 
+The codes that were used to build and host the website can be found at  https://github.com/GenomicsMachineLearning/SPanC-Lnc_Backend and https://github.com/GenomicsMachineLearning/SPanC-Lnc_Website 
