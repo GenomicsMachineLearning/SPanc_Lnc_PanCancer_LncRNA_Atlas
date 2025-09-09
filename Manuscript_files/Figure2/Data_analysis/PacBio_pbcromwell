@@ -1,0 +1,31 @@
+cd /scratch/project/stseq/Prakrithi/PacBio/SMRTlink/
+
+## Create indices .bai using samtools index and .pbi and xml
+smrtcmds/bin/dataset create --generateIndices s4_hifi.consensusreadset.xml m84073_231120_041831_s4.hifi_reads.default.bam 
+
+export SMRT_USER=uqdstetn
+export SMRT_ROOT=/QRISdata/Q4386/PacBio/smrtlink_full
+./smrtlink_11.1.0.166339.run --rootdir $SMRT_ROOT --smrttools-only
+
+
+### XML paths: 
+
+/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/barcodes/MAS-Seq_Adapter_v1/MAS-Seq_Adapter_v1.barcodeset.xml
+
+/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/barcodes/10X_Chromium_Single_Cell_3p_cDNA_Primers/10X_Chromium_Single_Cell_3p_cDNA_Primers.barcodeset.xml
+
+/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/barcodes/10X_Barcodes/visium_v1.RC.txt.gz
+
+## Reference path
+## downloaded from https://downloads.pacbcloud.com/public/dataset/MAS-Seq/REF-pigeon_ref_sets/Human_hg38_Gencode_v39/ . this also has visium barcode file
+
+pbcromwell run pb_segment_reads_and_sc_isoseq \
+      -e eid_ccs:s3_hifi.consensusreadset.xml \
+      -e eid_barcode:/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/barcodes/MAS-Seq_Adapter_v1/MAS-Seq_Adapter_v1.barcodeset.xml \
+      -e eid_barcode_2:/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/barcodes/10X_Chromium_Single_Cell_3p_cDNA_Primers/10X_Chromium_Single_Cell_3p_cDNA_Primers.barcodeset.xml \
+      -e eid_ref_dataset:/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/references/Human_hg38_Gencode_v39.referenceset.xml \
+      --task-option tenx_barcodes=/QRISdata/Q4386/PacBio/smrtlink/install/smrtlink-release_12.0.0.177059/bundles/smrtinub/current/private/pacbio/barcodes/10X_Barcodes/visium_v1.RC.txt.gz
+
+export CROMWELL_PATH=/scratch/project/stseq/Prakrithi/PacBio/SMRTlink/smrtcmds/bin/cromwell 
+
+# Next run TAR-scRNA-seq pipeline using the Minimap aligned bam generated from pbcromwell
