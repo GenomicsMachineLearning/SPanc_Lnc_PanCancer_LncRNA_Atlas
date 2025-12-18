@@ -25,3 +25,10 @@ PREVIOUSLY PUBLISHED DATA LINKS
   - Lung (NSCLC) https://www.10xgenomics.com/resources/datasets/nsclc-tumor-5-gene-expression-1-standard-2-2-0
   - Pancreatic cancer https://www.10xgenomics.com/resources/datasets/5k-human-pancreatic-tumor-isolated-with-chromium-nuclei-isolation-kit-3-1-standard
   - Ovarian cancer https://www.10xgenomics.com/resources/datasets/5k-human-ovarian-tumor-isolated-with-chromium-nuclei-isolation-kit-3-1-standard
+
+
+
+The SPanC-Lnc website can be accessed at 
+The development codes are at:
+https://github.com/GenomicsMachineLearning/SPanC-Lnc_Backend, 
+https://github.com/GenomicsMachineLearning/SPanC-Lnc_Website
